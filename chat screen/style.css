@@ -95,7 +95,9 @@ img {
 }
 
 .received-msg-inbox {
-  width: 57%;
+  width: 90%;
+  overflow-x: auto;
+  overflow-y: auto;
 }
 
 .received-msg-inbox p {
@@ -169,6 +171,10 @@ img {
 .input-group-text {
   background: transparent !important;
   border: none !important;
+}
+
+.input-group-text :hover {
+  cursor: pointer;
 }
 
 .input-group .fa {
