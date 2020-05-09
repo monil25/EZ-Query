@@ -4,5 +4,8 @@ from . import views
 
 urlpatterns = [
     path('', views.chatbot, name='chatbot'),
-    path('audio_to_text/', views.audio_to_text, name='audio_to_text')
+    path('record_audio_start/', views.record_audio_start,
+         name='record_audio_start'),
+    path('record_audio_stop/', views.record_audio_stop, name='record_audio_stop'),
+    path('nlp_process/', views.nlp_process, name='nlp_process')
 ]

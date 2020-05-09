@@ -1,19 +1,26 @@
 $(document).ready(function () {
   const sendIcon = document.getElementById("sendQuery");
   const inputField = document.getElementById("queryInput");
-  const msgElement = '<div class="outgoing-chats"><div class="outgoing-chats-msg" ><p>new message</p><span class="time">11:01 PM | October 11</span></div ><div class="outgoing-chats-img"><img src="user1.jpg" alt=""></div></div>'
+  const startRecord = document.getElementById("startRecord");
+  const stopRecord = document.getElementById("stopRecord");
+  stopRecord.disabled = true;
+  const stopFA = document.getElementById("stopFA");
+  const msgElement = '<div class="outgoing-chats"><div class="outgoing-chats-msg" ><p>new message</p></div ><div class="outgoing-chats-img"><img alt=""></div></div>'
+
+  const loadingMessage = '<div id = "loading" class="received-chats"> <div class = "received-msg"><div class = "received-msg-inbox"><div class = "bubble"><div class = "ellipsis one" > </div> <div class = "ellipsis two"> </div> <div class = "ellipsis three"></div></div></div><div></div>'
   const mainScreen = document.getElementById("mainScreen");
   $.fn.sendMessage = function () {
-
     var str = $("#queryInput").val();
     if (str.trim().length != 0) {
       var newMsgElement = msgElement.replace("new message", str);
-      var message = $(newMsgElement);
-      $('#mainScreen').append(message);
+      var messageDiv = $(newMsgElement);
+      $('#mainScreen').append(messageDiv);
+      var loading = $(loadingMessage);
+      $('#mainScreen').append(loading);
+      sendtoServer(str)
     }
     $("#queryInput").val("");
     mainScreen.scrollTop = mainScreen.scrollHeight;
-
   }
 
   $("#sendQuery").click(function () {
@@ -26,45 +33,35 @@ $(document).ready(function () {
       $.fn.sendMessage();
     }
   });
-  // var audioChunks;
-  // startRecord.onclick = e => {
-  //   startRecord.disabled = true;
-  //   stopRecord.disabled = false;
-  //   stopRecord.style.color = "red";
-  //   // This will prompt for permission if not allowed earlier
-  //   navigator.mediaDevices
-  //     .getUserMedia({
-  //       audio: true
-  //     })
-  //     .then(stream => {
-  //       audioChunks = [];
-  //       rec = new MediaRecorder(stream);
-  //       rec.ondataavailable = e => {
-  //         audioChunks.push(e.data);
-  //         if (rec.state == "inactive") {
-  //           let blob = new Blob(audioChunks, {
-  //             type: "audio/wav"
-  //           });
-  //           recordedAudio.src = URL.createObjectURL(blob);
-  //           // recordedAudio.controls = true;
-  //           // recordedAudio.autoplay = true;
-  //           audioDownload.href = recordedAudio.src;
-  //           audioDownload.download = "wav";
-  //           console.log(typeof (blob));
-  //           console.log(blob);
-  //           sendAudioToserver(blob)
-  //           // audioDownload.innerHTML = "download";
-  //         }
-  //       };
-  //       rec.start();
-  //     })
-  //     .catch(e => console.log(e));
-  // };
+  startRecord.addEventListener("click", startRecording);
+  stopRecord.addEventListener("click", stopRecording);
 
+  function sendtoServer(str) {
+    console.log("Send to server");
+    $.ajax({
+        url: "/chat/nlp_process/",
+        type: "POST",
+        data: {
+          message: str,
+        },
+      })
+      .done(function (response) {
+        console.log(response);
+        $("#loading").remove();
+        //Add new Div heres
+      })
+      .fail(function () {
+        console.log("Error Occured");
+      });
+  }
 
   function startRecording() {
+    console.log("Reached Here");
+    startRecord.disabled = true;
+    stopRecord.disabled = false;
+    stopFA.style.color = "red";
     $.ajax({
-        url: "/chat/audio_to_text/",
+        url: "/chat/record_audio_start/",
         type: "POST",
         data: {
           start: "StartRecording",
@@ -72,18 +69,22 @@ $(document).ready(function () {
       })
       .done(function (response) {
         console.log(response);
+        inputField.value = response["text"]
       })
       .fail(function () {
         console.log("Error Occured");
       });
   }
 
-  function StopRecording() {
+  function stopRecording() {
+    startRecord.disabled = false;
+    stopRecord.disabled = true;
+    stopFA.style.color = "white";
     $.ajax({
-        url: "/chat/stop_recording/",
+        url: "/chat/record_audio_stop/",
         type: "POST",
         data: {
-          start: "StartRecording",
+          start: "StopRecording",
         },
       })
       .done(function (response) {

@@ -43,12 +43,12 @@
               <div class="received-msg">
                 <div class="received-msg-inbox">
                   <p>Hi there!! I am here to solve your Queries.</p>
-                  <span class="time">11:01 PM | October 11</span>
+                  <!-- <span class="time">11:01 PM | October 11</span> -->
                 </div>
               </div>
             </div>
-
-            <div class="outgoing-chats">
+            <!-- ########################## from here by default code was commented -->
+            <!-- <div class="outgoing-chats">
 
               <div class="outgoing-chats-msg">
                 <p>Show students having example.com in their email from student's table</p>
@@ -57,11 +57,9 @@
               <div class="outgoing-chats-img">
                 <img src="{% static 'chat/images/user1.jpg' %}" alt="">
               </div>
-            </div>
-            <!-- repeat ends -->
+            </div> -->
 
-            <!-- from here it will repeat -->
-            <div class="received-chats">
+            <!-- <div class="received-chats">
               <div class="received-chats-img">
                 <img src="{% static 'chat/images/user2.png' %}" alt="">
               </div>
@@ -96,9 +94,9 @@
                   <span class="time">11:01 PM | October 11</span>
                 </div>
               </div>
-            </div>
+            </div>-->
 
-            <div class="outgoing-chats">
+            <!-- <div class="outgoing-chats">
 
               <div class="outgoing-chats-msg">
 
@@ -109,20 +107,10 @@
               <div class="outgoing-chats-img">
                 <img src="{% static 'chat/images/user1.jpg' %}" alt="">
               </div>
-            </div>
-            <div class="received-chats">
-              <div class="received-msg">
-                <div class="received-msg-inbox">
-                  <div class="bubble">
-                    <div class="ellipsis one"></div>
-                    <div class="ellipsis two"></div>
-                    <div class="ellipsis three"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- repeat ends -->
-            <div class="received-chats">
+            </div> -->
+
+            <!-- Thank you Message From chatbot to end Chat -->
+            <!-- <div class="received-chats">
               <div class="received-chats-img">
                 <img src="{% static 'chat/images/user2.png' %}" alt="">
               </div>
@@ -132,7 +120,7 @@
                   <span class="time">11:01 PM | October 11</span>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -140,14 +128,11 @@
       <!-- Send text Input textbox -->
       <div class="msg-bottom">
         <div class="bottom-icons">
-          <i class="fa fa-microphone" id="startRecord"></i>
-          <i class="fa fa-square" id="stopRecord"></i>
-          <i class="fa fa-smile-o"></i>
+          <button class="btn" id="startRecord"><i class="fa fa-microphone"></i></button>
+          <button id="stopRecord" class="btn"><i id="stopFA" class="fa fa-square"></i></button>
+          <a class="fa fa-smile-o"></a>
+          <!-- <p id="statusOfRecord"></p> -->
         </div>
-        <p>
-          <audio id="recordedAudio"></audio>
-          <a id="audioDownload"></a>
-        </p>
         <div class="input-group">
           <input id="queryInput" type="text" class="form-control" placeholder="Type your Query">
           <div class="input-group-append">
