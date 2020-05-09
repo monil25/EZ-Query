@@ -1,0 +1,1 @@
+{"dtype": "<U12", "py/object": "numpy.ndarray", "values": ["create_table", "delete_query", "insert_query", "select_query", "update_query"]}

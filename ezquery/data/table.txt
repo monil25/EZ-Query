@@ -1,0 +1,7 @@
+student
+order
+pencil
+pen
+teacher
+manager
+game

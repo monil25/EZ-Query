@@ -1,0 +1,7 @@
+## intent:select_query
+1add to the chocolate table with [colour](column) [black](value) and [flavour](column) [nuts](value) and [quanity](column) [20](value)
+2add to the chocolate table with [colour](column) [black](value) [flavour](column) [nuts](value) [quanity](column) [20](value)
+1add to the chocolate table with [colour](column) [black](value) and [flavour](column) [nuts](value) and [quanity](column) [20](value)
+2add to the chocolate table with [colour](column) [black](value) [flavour](column) [nuts](value) [quanity](column) [20](value)
+
+##Ivlkjlhjbbhjvjhvjhv

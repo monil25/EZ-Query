@@ -1,0 +1,9 @@
+id
+name
+marks
+standard
+age
+price
+subject
+colour
+lead

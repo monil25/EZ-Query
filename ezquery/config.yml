@@ -1,0 +1,20 @@
+# Configuration for Rasa NLU.
+# https://rasa.com/docs/rasa/nlu/components/
+language: en
+pipeline:
+- name: "nlp_spacy"
+- name: "tokenizer_spacy"
+- name: "ner_crf"
+# - name: "tokenizer_whitespace"
+- name: "intent_featurizer_spacy"     # creates sentence vector representations
+- name: "intent_classifier_sklearn"   # defines the classifier
+  intent_tokenization_flag: true+
+  intent_split_symbol: "+"
+
+
+# Configuration for Rasa Core.
+# https://rasa.com/docs/rasa/core/policies/
+policies:
+  - name: MemoizationPolicy
+  - name: KerasPolicy
+  - name: MappingPolicy
