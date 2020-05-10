@@ -8,6 +8,7 @@ $(document).ready(function () {
   const msgElement = '<div class="outgoing-chats"><div class="outgoing-chats-msg" ><p>new message</p></div ><div class="outgoing-chats-img"><img alt=""></div></div>'
 
   const loadingMessage = '<div id = "loading" class="received-chats"> <div class = "received-msg"><div class = "received-msg-inbox"><div class = "bubble"><div class = "ellipsis one" > </div> <div class = "ellipsis two"> </div> <div class = "ellipsis three"></div></div></div><div></div>'
+  const sendReplyMessage = `<div class="received-chats"> <div class = "received-chats-img" ></div> <div class = "received-msg" ><div class = "received-msg-inbox" > ReplyMessage </div> </div> </div>`
   const mainScreen = document.getElementById("mainScreen");
   $.fn.sendMessage = function () {
     var str = $("#queryInput").val();
@@ -46,8 +47,39 @@ $(document).ready(function () {
         },
       })
       .done(function (response) {
-        console.log(response);
+        query_type = response.type;
+        console.log(query_type);
+        var addReplyDiv;
+        if (query_type.localeCompare("select") == 0) {
+          console.log(query_type);
+          let details = response.information;
+          var tableHeading = '<div style="overflow-x:auto;"><table class="table table-bordered table-striped"><thead class="thead-dark"><tr>'
+          //adding colnames
+          console.log(details[0])
+          Object.entries(details[0]).forEach(([key, value]) => {
+            tableHeading = tableHeading.concat(`<th>${value}</th>`)
+          })
+          tableHeading = tableHeading.concat(`</tr></thead>`);
+          details.shift(); //removing colnames
+          var tableBody = '<tbody>'
+          details.forEach(row => {
+            tableBody = tableBody.concat("<tr>")
+            Object.entries(row).forEach(([key, value]) => {
+              tableBody = tableBody.concat(`<th>${value}</th>`)
+            })
+            tableBody = tableBody.concat("<tr>")
+          })
+          tableBody = tableBody.concat("</tbody></table></div>");
+          //console.log(addReplyDiv);
+          addReplyDiv = tableHeading.concat(tableBody);
+        } else {
+          addReplyDiv = sendReplyMessage.replace("ReplyMessage", `<p>${response.message}</p>`);
+        }
+        //console.log(addReplyDiv);
         $("#loading").remove();
+        addReplyDiv = $(addReplyDiv);
+        $('#mainScreen').append(addReplyDiv);
+        mainScreen.scrollTop = mainScreen.scrollHeight;
         //Add new Div heres
       })
       .fail(function () {
@@ -94,11 +126,5 @@ $(document).ready(function () {
         console.log("Error Occured");
       });
   }
-  // stopRecord.onclick = e => {
-  //   startRecord.disabled = false;
-  //   stopRecord.disabled = true;
-  //   stopRecord.style.color = "white";
-  //   rec.stop();
-  // };
 
 });

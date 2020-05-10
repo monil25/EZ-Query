@@ -637,7 +637,22 @@ def nlp_process(request):
     {0: 'donald', 1: 12, 2: 20, 3: 10}]
 
     '''
+    '''
+    details=[{0: 'name', 1: 'age', 2: 'marks',3: 'standard'},
+    {0: 'Rick', 1: 65, 2: 100, 3: 10},
+    {0: 'Morty', 1: 12, 2: 10, 3: 5},
+    {0: 'Summer', 1: 14, 2: 12, 3: 10},
+    {0: 'Jerry', 1: 40, 2: 50, 3: 10},
+    {0: 'Meesik', 1: 100, 2: 100, 3: 10},
+    {0: 'Ed', 1: 12, 2: 75, 3: 10}, 
+    {0: 'saumi', 1: 19, 2: None, 3: None}, 
+    {0: 'donald', 1: 12, 2: 20, 3: 10}]
 
+    # for select
+    context = {"type": "select","information":details}
+    #for update/delete example below
+    context = {"type": "update","message":Information updated}
+    '''
 
 
     print(TABLE)
