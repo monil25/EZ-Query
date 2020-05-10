@@ -511,6 +511,9 @@ print(MetaTables)
 
 
 def chatbot(request):
+    #Send tables and fields like this way
+    # tables={"student":["marks","Age","class"],"Teacher":["name","salary","age"]}
+    # return render(request, 'chat/chat.html',{'tables':tables})
     return render(request, 'chat/chat.html')
 
 
