@@ -210,3 +210,8 @@ domain.txt
 - change data in table [pencil](table) where [color](column) is [10](value) to [id](column) [10](value)
 - change data in table [pencil](table) where [color](column) is [10](value) to [id](column) [50](value)
 - change record in table [pencil](table) where [color](column) is [10](value) to [id](column) [50](value) 
+- change record in the [students](table) where [name](column) is [saumitra](value) to new [marks](column) [10](value) and [age](column) [12](value) years
+- change record in the [students](table) table where [name](column) is [monil](value) to new [name](column) [manil](value) 
+- change reecord in the [students](table) table where [name](column) is [morty](value) to new [name](column) [jack](value)
+- change record in the [orders](table) table where [marks](column) is [20](value) to new [age](column) [20](value) years
+- change records for [students](table) where [marks](column) is [20](value) to new [marks](column) [20](value)  

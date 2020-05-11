@@ -10,7 +10,8 @@ import mysql.connector
 from collections import defaultdict
 import pandas as pd
 from sqlalchemy import create_engine
-
+import requests
+import json
 
 
 
@@ -35,7 +36,8 @@ This is for adding new table names to the NLU training model
 '''
 
 def txt_new_table(tableName):
-    file = open("data/table.txt","a")
+    file = open("D:/SEProj/EZ-Query/ezquery/data/table.txt","a")
+    
     file.write(tableName+" \n")
     file.close()
     
@@ -46,7 +48,7 @@ This is for adding new column names to the NLU training model
     
     
 def txt_new_columns(tableColumns):
-    file = open("data/column.txt","a")
+    file = open("D:/SEProj/EZ-Query/ezquery/data/column.txt","a")
     
     for col in tableColumns:
         file.write(col+" \n")
@@ -67,7 +69,10 @@ def extract_details_from_SQLDUMP(fileLocation):
         print(table)
         print(columns)
         
-        return table,column
+        txt_new_table(table)
+        txt_new_columns(columns)
+
+        return "SUCCESS"
 
 
 
@@ -78,6 +83,13 @@ def csv_to_SQL_path(csvFilePath,tableName):
     df = pd.read_csv(csvFilePath)
     engine = create_engine('mysql+mysqldb://saumitra:dada9946@localhost:3306/ez', echo = False)
     df.to_sql(name = tableName, con = engine, if_exists = 'append', index = False)
+
+    columns = df.columns
+
+    txt_new_table(table)
+    txt_new_columns(columns)
+
+    return "SUCCESS"
     
 '''
 def csv_to_SQL(df,tableName):
@@ -101,9 +113,12 @@ def fetch_data(QUERY,columns):
         data = []
 
         rlen = 0 
-        if records != None:
+        print(records)
+        if records != []:
             rlen = len(records[0])
-
+        else:
+            print("Here")
+            return []
         if rlen == 0:
             return list()
         
@@ -123,14 +138,15 @@ def fetch_data(QUERY,columns):
             
             data.append(rdata)
 
-    except Error as e:
+    except NameError as e:
         print("Error reading data from MySQL table", e)
     finally:
         if (connection.is_connected()):
             connection.close()
             cursor.close()
             print("MySQL connection is closed")
-            
+    
+
     return data
 
 
@@ -155,7 +171,7 @@ def fetch_metadata(QUERY_TABLE):
                 dtype = "int"
             tables[row[0]][row[1]] = dtype
 
-    except Error as e:
+    except NameError as e:
         print("Error reading data from MySQL table", e)
     finally:
         if (connection.is_connected()):
@@ -175,13 +191,13 @@ def get_table_from_sql(table):
 
 
 ## Load config.yml
-trainer = Trainer(config.load("../config.yml"))
+# trainer = Trainer(config.load("../config.yml"))
 
 ## model_directory
-model_directory = trainer.persist('../models/')
+# model_directory = trainer.persist('../models/')
 
 ## load interpreter
-interpreter = Interpreter.load(model_dir='../models/nlu-4/nlu') 
+# interpreter = Interpreter.load(model_dir='../models/nlu-4/nlu') 
 
 '''
 This is for connecting to the database
@@ -249,6 +265,8 @@ def construct_insert_query(rasa):
     
     QUERY = "INSERT INTO {} ({}) VALUES({})".format(TABLE,','.join(COLUMN),','.join(VALUE))
     print(QUERY)
+
+
     return QUERY,[],"I"
 
 
@@ -268,9 +286,9 @@ def fetch_allcol(table):
         data = []
 
         for row in records:
-            data.append(row.lstrip("(").rstrip(",)"))
+            data.append(row[0].rstrip(","))
 
-    except Error as e:
+    except NameError as e:
         print("Error reading data from MySQL table", e)
     finally:
         if (connection.is_connected()):
@@ -280,6 +298,18 @@ def fetch_allcol(table):
             
     return data
 
+
+def handle_conditions(COLUMN,MODIFIED_COND,VALUE):
+    where = ""
+    
+    for i in range(len(COLUMN)):
+        where += COLUMN[i] + " "
+        where += MODIFIED_COND[i] + " "
+        where += VALUE[i] + ","
+        
+    where = where.rstrip(",")
+    
+    return where
 
 
 def construct_select_query(rasa):
@@ -319,7 +349,7 @@ def construct_select_query(rasa):
     
     VALUE = convertSQLStrings(VALUE)
     if COLUMN != []:
-        ORDER = COLUMN.pop()
+        ORDER = COLUMN[0]
     else:
         ORDER = "NULL"
 
@@ -422,6 +452,8 @@ def create_table_query(rasa):
     
     QUERY = "CREATE TABLE {} ({});".format(TABLE,columns)
     print(QUERY)
+    txt_new_table(TABLE)
+    txt_new_columns(COLUMN)
     return QUERY,[],"C"
 
 
@@ -432,7 +464,7 @@ def construct_update_query(rasa):
     UPDATE_COL = []
     UPDATE_VAL = []
     
-    change = resp["text"].find("new")
+    change = rasa["text"].find("new")
     
     
     for ent in rasa["entities"]:
@@ -504,17 +536,18 @@ def identify_intent(resp):
     
     return QUERY,LIST,QT
 
-
-## Fetch Metadata
-MetaTables = fetch_metadata(META_QUERY)
-print(MetaTables)
-
-
 def chatbot(request):
+    values = fetch_metadata(META_QUERY)
+    tables = dict()
+
+    for key,val in values.items():
+        tables[key] = list(val.keys())
+
     #Send tables and fields like this way
     # tables={"student":["marks","Age","class"],"Teacher":["name","salary","age"]}
     # return render(request, 'chat/chat.html',{'tables':tables})
-    return render(request, 'chat/chat.html')
+    print(tables)
+    return render(request, 'chat/chat.html',{'tables':tables})
 
 
 @csrf_exempt
@@ -534,40 +567,14 @@ def record_audio_start(request):
             print("Audio recorded")
         # recognize speech using Google Speech Recognition
         try:
-            message = r.recognize_google(audio)
-            message = message.lower()
-            print(message)
-    
-            message = interpreter.parse(message)
-            print(message)
-            print(type(message))
-            QUERY,Columns,QT = identify_intent(message)
-            print(QUERY,Columns,QT)
-            TABLE = []
-            RESPONSE = ""
-            if QT == "S":
-                TABLE = fetch_data(QUERY,Columns)
-            else:
-                if QT == "I":
-                    RESPONSE = execute(QUERY) + "INSERT"
-                elif QT == "D":
-                    RESPONSE = execute(QUERY) + "DELETE"
-                elif QT == "C":
-                    RESPONSE = execute(QUERY) + "CREATE"
-                elif QT == "U":
-                    RESPONSE = execute(QUERY)+"UPDATE"
-
-            print(TABLE)
-            context = {"message": "echo"+RESPONSE}
-            return JsonResponse(context)
-
-            # main_text = main_text + "\n" + new_text
-            # print("Google Speech Recognition thinks you said " + new_text)
-
+            new_text = r.recognize_google(audio)
+            main_text = main_text + "\n" + new_text
+            print("Did You Say  " + new_text)
         except sr.UnknownValueError:
-            print("Google Speech Recognition could not understand audio")
+            print("Sorry we cant understand this !!")
         except sr.RequestError as e:
-            print("Could not request results from Google Speech Recognition service; {0}".format(e))
+            print(
+                "Could not request results from Google Speech Recognition service; {0}".format(e))
         print(main_text)
     return JsonResponse({"text": main_text})
 
@@ -588,7 +595,7 @@ def nlp_process(request):
     Message is recieved from post
     '''
     
-    message = interpreter.parse(message)
+    # message = interpreter.parse(message)
 
     '''
     Message is interpreted
@@ -596,6 +603,24 @@ def nlp_process(request):
     print(message)
     print(type(message))
 
+    '''
+    FLASK CODE
+    '''
+
+
+    URL = 'http://localhost:5000/predict'
+    payload = {
+        'QUERY': message,
+        'persistent': '1'  # remember me
+    }
+
+
+
+    session = requests.session()
+    r = requests.post(URL, data=payload)
+    message = (str(r.content)[2:-3])
+
+    message = json.loads(message)
     '''
     Identify INTENT RETURNS
 
@@ -605,22 +630,33 @@ def nlp_process(request):
     QT - Query Type
 
     '''
-
+    context = dict()
     QUERY,Columns,QT = identify_intent(message)
     print(QUERY,Columns,QT)
+    
+
+
+    # print(QUERY,Columns,QT)
     TABLE = []
     RESPONSE = ""
     if QT == "S":
         TABLE = fetch_data(QUERY,Columns)
+        context = {"type":"select","information":TABLE}
     else:
+        Qtype = ""
         if QT == "I":
             RESPONSE = execute(QUERY) + "INSERT"
+            Qtype = "insert"
         elif QT == "D":
             RESPONSE = execute(QUERY) + "DELETE"
+            Qtype = "delete"
         elif QT == "C":
             RESPONSE = execute(QUERY) + "CREATE"
+            Qtype = "create"
         elif QT == "U":
             RESPONSE = execute(QUERY)+"UPDATE"
+            Qtype = "update"
+        context = {"type":Qtype,"message":"Transaction executed succesfully"}
 
     '''
     RESPONSE : Transaction is executed succesfully
@@ -656,8 +692,27 @@ def nlp_process(request):
     #for update/delete example below
     context = {"type": "update","message":Information updated}
     '''
-
-
     print(TABLE)
-    context = {"message": "echo"+RESPONSE}
     return JsonResponse(context)
+
+
+@csrf_exempt
+def visualize(request):
+    tables = fetch_metadata(META_QUERY)
+    tables = dict(tables)
+
+    '''
+    Look at visulaize.html
+
+        tables 
+
+    VVVVVVVVVVVVVVVV
+
+     {'chocolates': {'name': 'string', 'price': 'int'},
+     'essentials': {'object': 'string', 'price': 'int'}, 'leagues': {'team': 'string',
+     'league': 'string', 'country': 'string', 'points': 'int'}, 'manager': {'race': 'int'}, 
+     'my_table': {'name': 'string', 'age': 'string'},
+     'students': {'name': 'string', 'age': 'int', 'marks': 'int', 'standard': 'int'}}
+    '''
+
+    return render(request, 'chat/visualize.html',{'tables':tables})

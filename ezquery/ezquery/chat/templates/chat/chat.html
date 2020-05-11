@@ -11,7 +11,25 @@
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+
+  <!-- SCROLLABLE DIV-->
+
+  <style type="text/css">
+    div.scroll { 
+                margin:4px, 4px; 
+                padding:4px; 
+                width: 400px; 
+                height: 720px; 
+                overflow-x: hidden; 
+                overflow-x: auto; 
+                text-align:justify; 
+            } 
+  </style>
+
 </head>
+
+
 
 <body>
   <div class="row">
@@ -69,15 +87,16 @@
       </div>
     </div>
     <div class="col-4">
-      <div class="container">
-        <h3>List of Table and their Fields</h3>
+      <div class="container scroll" >
+        <h3>TABLES AND COLUMNS</h3>
+        <h6>refer them while querying</h6>
         <div class="accordion" id="accordionExample">
           {% for key, value in tables.items %}
           <div class="card">
-            <div class="card-header" id={{key}}heading>
+            <div class="card-header" id={{key}}heading style="background-color: #219ff6">
               <h5 class="mb-0">
                 <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#{{key}}collapse"
-                  aria-expanded="true" aria-controls={{key}}collapse>
+                  aria-expanded="true" aria-controls={{key}}collapse style="color: white">
                   {{key}}
                 </button>
               </h5>
@@ -85,7 +104,7 @@
 
             <div id={{key}}collapse class="collapse show" aria-labelledby={{key}}heading
               data-parent="#accordionExample">
-              <div class="card-body">
+              <div class="card-body" style="background-color: #baf6f7">
                 {% for column_name in value %}
                 <button type="button" class="btn btn-info">{{column_name}}</button>
                 {% endfor %}

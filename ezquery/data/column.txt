@@ -7,3 +7,5 @@ price
 subject
 colour
 lead
+object 
+price 
