@@ -8,5 +8,6 @@ urlpatterns = [
          name='record_audio_start'),
     path('record_audio_stop/', views.record_audio_stop, name='record_audio_stop'),
     path('nlp_process/', views.nlp_process, name='nlp_process'),
-    path('visualize/',views.visualize,name = 'visualize' )
+    path('visualize/',views.visualize,name = 'visualize' ),
+    path('table_fields/',views.table_fields,name = 'table_fields' )
 ]

@@ -716,3 +716,10 @@ def visualize(request):
     '''
 
     return render(request, 'chat/visualize.html',{'tables':tables})
+
+@csrf_exempt
+def table_fields(request):
+    # here one of the "key" is "table" one of it it is "csrfmiddlewaretoken" other keys are "column_name:domain"
+    for key, values in request.POST.lists():
+        print(key, values)
+    return JsonResponse({"succes":"data recieved"})

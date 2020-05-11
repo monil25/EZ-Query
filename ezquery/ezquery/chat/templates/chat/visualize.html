@@ -1,32 +1,39 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-	<title>Visualize Detail</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualization</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </head>
+<!-- in below code allowing only those checkbox for specific radio button is remaining, and atmost two checkbox also remaining-->
+
 <body>
-	<div style="color:">
-		<h1>Get <span style="color: black">VISUALIZATIONS</span> here !!</h1>
-		<div>
-          {% for key, value in tables.items %}
-          <div class="card" style="width: 500px">
-            <div class="card-header" id={{key}}heading style="background-color: #baf6f7">
-              <h5 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#{{key}}collapse"
-                  aria-expanded="true" aria-controls={{key}}collapse style="color: white;height: 80px;font-size: 50px;background-color: #219ff6">
-                  {{key}}
-                </button>
-              </h5>
-            </div>
-              <div class="card-body" style="background-color: #219ff6">
-                {% for column_name,domain in value.items %}
-                <button type="button" class="btn btn-info" style="height: 50px;background-color:#baf6f7;color: black">{{column_name}}</button>
-                <button type="button" class="btn btn-info">{{domain}}</button>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-	</div>
+  <br>
+  <br>
+  <div style="text-transform: capitalize;">
+    <form action="post" id="table_fields">
+      {% csrf_token %}
+      {% for key, value in tables.items %}
+      <input type="radio" id={{key}} name="table" value={{key}}>
+      <label for={{key}} class="btn btn-danger">{{key}}</label><br>
+      {% for column_name,domain in value.items %}
+      <input type="checkbox" id="{{column_name}}:{{domain}}" name="{{column_name}}:{{domain}}"
+        value="{{column_name}}:{{domain}}">
+      <label for="{{column_name}}:{{domain}}" class="btn btn-light"> {{column_name}}<span
+          class="text-muted">({{domain}})<span></label>
+      {% endfor %}
+      <br>
+      <br>
+      {% endfor %}
+      <button type="submit" class="btn btn-success">Get Visualization</button>
+    </form>
+  </div>
+  <script src="{% static 'chat/js/visualize.js' %}"></script>
 </body>
+
 </html>
