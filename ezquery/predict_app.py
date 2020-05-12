@@ -13,7 +13,7 @@ from rasa.nlu.model import Metadata,Interpreter
 
 trainer = Trainer(config.load("config.yml"))
 model_directory = trainer.persist('./models/')
-interpreter = Interpreter.load(model_dir='./models/nlu-5/nlu')
+interpreter = Interpreter.load(model_dir='./models/nlu-6/nlu')
 
 
 

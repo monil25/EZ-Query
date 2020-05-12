@@ -6,5 +6,4 @@ teacher
 manager
 game
 chocolates
-
 essentials 

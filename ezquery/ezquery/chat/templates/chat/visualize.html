@@ -9,29 +9,61 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+  <style type="text/css">
+    div.scroll { 
+                margin:4px, 4px; 
+                padding:4px; 
+                width: 600px; 
+                height: 500px; 
+                overflow-x: hidden; 
+                overflow-x: auto; 
+                text-align:justify; 
+            } 
+  </style>
+
+
 </head>
 <!-- in below code allowing only those checkbox for specific radio button is remaining, and atmost two checkbox also remaining-->
 
 <body>
   <br>
   <br>
-  <div style="text-transform: capitalize;">
+  <h1 style="margin-left: 500px;margin-bottom: 50px"> VISULALIZATION BOARD </h1>
+  <br>
+  <br>
+  <div style="text-transform: capitalize;margin-left: 100px;float: left;">
     <form action="post" id="table_fields">
-      {% csrf_token %}
-      {% for key, value in tables.items %}
-      <input type="radio" id={{key}} name="table" value={{key}}>
-      <label for={{key}} class="btn btn-danger">{{key}}</label><br>
-      {% for column_name,domain in value.items %}
-      <input type="checkbox" id="{{column_name}}:{{domain}}" name="{{column_name}}:{{domain}}"
+      <div class="scroll">
+        {% csrf_token %}
+        {% for key, value in tables.items %}
+        <input type="radio" id={{key}} name="table" value={{key}}>
+        <label for={{key}} class="btn btn-danger">{{key}}</label><br>
+        {% for column_name,domain in value.items %}
+        <input type="checkbox" id="{{column_name}}:{{domain}}" name="{{column_name}}:{{domain}}"
         value="{{column_name}}:{{domain}}">
-      <label for="{{column_name}}:{{domain}}" class="btn btn-light"> {{column_name}}<span
+        <label for="{{column_name}}:{{domain}}" class="btn btn-light"> {{column_name}}<span
           class="text-muted">({{domain}})<span></label>
-      {% endfor %}
+        {% endfor %}
       <br>
       <br>
-      {% endfor %}
+      {% endfor %}  
+      </div>
+      
       <button type="submit" class="btn btn-success">Get Visualization</button>
     </form>
+  </div>
+  <div style="margin-left: 800px">
+    <h2>1) Select Tables.</h3>
+
+    <h3>--> Select appropriate table whose plots you want to construct... </h3>
+    <br>
+    <br>
+    <h2>2) Select Columns.</h2>
+    <br>
+    <h3>--> Select appropriate columns....</h3>
+    <br>
+    <h3>Keep an eye on the domains they may cause problems or senseless results...</h3>
   </div>
   <script src="{% static 'chat/js/visualize.js' %}"></script>
 </body>

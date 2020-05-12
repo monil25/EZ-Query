@@ -12,6 +12,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 import requests
 import json
+import plotly.express as px
 
 
 
@@ -457,6 +458,20 @@ def create_table_query(rasa):
     return QUERY,[],"C"
 
 
+def create_visualize_query(rasa):
+    TABLE = ""
+    COLUMN = []
+    
+    for ent in rasa["entities"]:
+        if ent["entity"] == "table":
+            TABLE = ent["value"]
+        elif ent["entity"] == "column" and TABLE != "":
+            COLUMN.append(ent["value"])
+
+    
+    return TABLE,COLUMN,"V"
+
+
 def construct_update_query(rasa):
     TABLE = ""
     INI_COL = []
@@ -531,6 +546,8 @@ def identify_intent(resp):
         QUERY,LIST,QT = construct_delete_query(resp)
     elif resp["intent"]["name"] == "create_table":
         QUERY,LIST,QT = create_table_query(resp)
+    elif resp["intent"]["name"] == "visualize_query":
+        QUERY,LIST,QT = create_visualize_query(resp)
     else:
         return "Bad Request"
     
@@ -594,8 +611,6 @@ def nlp_process(request):
     '''
     Message is recieved from post
     '''
-    
-    # message = interpreter.parse(message)
 
     '''
     Message is interpreted
@@ -634,9 +649,7 @@ def nlp_process(request):
     QUERY,Columns,QT = identify_intent(message)
     print(QUERY,Columns,QT)
     
-
-
-    # print(QUERY,Columns,QT)
+   
     TABLE = []
     RESPONSE = ""
     if QT == "S":
@@ -656,7 +669,17 @@ def nlp_process(request):
         elif QT == "U":
             RESPONSE = execute(QUERY)+"UPDATE"
             Qtype = "update"
-        context = {"type":Qtype,"message":"Transaction executed succesfully"}
+        elif QT == "V":
+            df = get_table_from_sql(QUERY)
+            COLUMNS = Columns
+            if Columns != []:
+                fig = px.scatter(x=df[COLUMNS[0]], y=df[COLUMNS[1]])
+                fig.show()
+            else:
+                fig = px.scatter_matrix(df,
+                dimensions=df.columns)
+                fig.show()
+        context = {"type":Qtype,"message":Qtype + ": Transaction executed succesfully"}
 
     '''
     RESPONSE : Transaction is executed succesfully
@@ -720,6 +743,25 @@ def visualize(request):
 @csrf_exempt
 def table_fields(request):
     # here one of the "key" is "table" one of it it is "csrfmiddlewaretoken" other keys are "column_name:domain"
-    for key, values in request.POST.lists():
-        print(key, values)
+    # table = request.POST.lists()["table"][0]
+    TABLE = ""
+    COLUMNS = []
+
+    for k,v in request.POST.lists():
+        if k != "csrfmiddlewaretoken":
+            if k == "table":
+                TABLE = v[0]
+            else:
+                COLUMNS.append(v[0].split(":")[0])
+
+    df = get_table_from_sql(TABLE)
+    
+    if TABLE != None:
+        fig = px.scatter(x=df[COLUMNS[0]], y=df[COLUMNS[1]])
+        fig.show()
+    else:
+        fig = px.scatter_matrix(df,
+        dimensions=df.columns)
+        fig.show()
+
     return JsonResponse({"succes":"data recieved"})

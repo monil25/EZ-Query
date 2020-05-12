@@ -214,4 +214,23 @@ domain.txt
 - change record in the [students](table) table where [name](column) is [monil](value) to new [name](column) [manil](value) 
 - change reecord in the [students](table) table where [name](column) is [morty](value) to new [name](column) [jack](value)
 - change record in the [orders](table) table where [marks](column) is [20](value) to new [age](column) [20](value) years
-- change records for [students](table) where [marks](column) is [20](value) to new [marks](column) [20](value)  
+- change records for [students](table) where [marks](column) is [20](value) to new [marks](column) [20](value) 
+
+
+## intent:visualize_query
+
+- draw me a graph of [students](table) [name](column) against [marks](column)
+- draw me a graph of [students](table) [marks](column) against [age](column)
+- draw me a graph of [chocolates](table) [name](column) against [price](column)
+- draw me a graph of [students](table) [standard](column) against [marks](column)
+- draw me a graph of [students](table) [marks](column) against [age](column)
+- draw me a graph of [chocolates](table) [name](column) against [price](column)
+- draw me a graph of [order](table) [price](column) against [id](column)
+- draw me a graph of [students](table) [marks](column) against [age](column)
+- draw me a graph of [order](table) [quantity](column) against [price](column)
+- draw me a graph of [students](table) [age](column) against [marks](column)
+- draw me a graph of [pencil](table) [color](column) against [price](column)
+- draw me a graph of [chocolates](table) [name](column) against [price](column)
+- draw me a graph of [students](table) [name](column) against [marks](column)
+- draw me a graph of [students](table) [marks](column) against [age](column)
+- draw me a graph of [chocolates](table) [name](column) against [price](column) 
