@@ -20,7 +20,7 @@ import plotly.express as px
 NLP Imports
 '''
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import speech_recognition as sr
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -765,3 +765,17 @@ def table_fields(request):
         fig.show()
 
     return JsonResponse({"succes":"data recieved"})
+
+def upload(request):
+    if request.method == 'POST' and request.FILES['myFile']:
+        print("POST request")
+        myfile = request.FILES['myFile']
+        print(myfile.name)
+        print(myfile.size)
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        print(uploaded_file_url)
+        # This is relative path add other path.
+        return redirect('chatbot')
+    return render(request,'chat/upload.html')
