@@ -25,6 +25,8 @@ import speech_recognition as sr
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 # Create your views here.
 
 checkIfRecording = -1
@@ -73,24 +75,24 @@ def extract_details_from_SQLDUMP(fileLocation):
         txt_new_table(table)
         txt_new_columns(columns)
 
-        return "SUCCESS"
+        return table,columns
 
 
 
 '''
 This for converting a csv file to a SQL database
 '''
-def csv_to_SQL_path(csvFilePath,tableName):
+def csv_to_SQL(csvFilePath,tableName):
     df = pd.read_csv(csvFilePath)
     engine = create_engine('mysql+mysqldb://saumitra:dada9946@localhost:3306/ez', echo = False)
     df.to_sql(name = tableName, con = engine, if_exists = 'append', index = False)
 
     columns = df.columns
 
-    txt_new_table(table)
+    txt_new_table(tableName)
     txt_new_columns(columns)
 
-    return "SUCCESS"
+    return tableName,columns
     
 '''
 def csv_to_SQL(df,tableName):
@@ -768,14 +770,40 @@ def table_fields(request):
 
 def upload(request):
     if request.method == 'POST' and request.FILES['myFile']:
-        print("POST request")
+        print(request.content_params)
+        # myTable = request["myTable"]
         myfile = request.FILES['myFile']
         print(myfile.name)
         print(myfile.size)
+
+        type_of_file = myfile.name.split(".")[1]
+
         fs = FileSystemStorage()
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
-        print(uploaded_file_url)
+        media_path = "D:/SEProj/EZ-Query/ezquery/ezquery/media"
+        media_path += "/"+myfile.name
+        print(media_path)
+        '''
+        Read SQL file and Process
+        '''
+
+
+        '''
+        C:/Users/Saumitra/Desktop/cpf/LearnJDBC
+        '''
+
+        if type_of_file == "sql":
+            table,columns = extract_details_from_SQLDUMP(media_path)
+            print(table)
+            print(columns)
+        else:
+            table,columns = csv_to_SQL(media_path,myfile.name.split(".")[0])
+            print(table)
+            print(columns)
+
+
+
         # This is relative path add other path.
         return redirect('chatbot')
     return render(request,'chat/upload.html')
