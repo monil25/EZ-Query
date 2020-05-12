@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Bootstrap 4 Carousel</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <style>
+        .carousel {
+            background: #007bff;
+            margin-top: 20px;
+            height: 720px;
+            width: 1500px;
+            align-self: center;
+        }
+
+        .carousel-item {
+            text-align: center;
+            min-height: 280px;
+            /* Prevent carousel from being distorted if for some reason image doesn't load */
+        }
+
+        .bs-example {
+            margin: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bs-example">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <!-- Carousel indicators -->
+            <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+                <li data-target="#myCarousel" data-slide-to="2"></li>
+            </ol>
+            <!-- Wrapper for carousel items -->
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div style="margin: 100px">
+                        <h1 style="color: white;">EZ-QUERY</h1>
+                        <h3 style="color: #d3d3d3;">A Natural Language Interface for your SQL Databases</h3>
+                    </div>
+                    <div style="margin: 100px;text-align: left;margin-left: 200px">
+                        <ul>
+                            <li>
+                                <h2 style="color: black;">Query in Simple <span style="color: white">ENGLISH</span>
+                                </h2>
+                            </li>
+                            <li>
+                                <h2 style="color: black;">Query your existing <span style="color: white"> MYSQL</span>
+                                    databases </h2>
+                            </li>
+                            <li>
+                                <h2 style="color: black;">Query your existing <span style="color: white"> MYSQL</span>
+                                    databases </h2>
+                            </li>
+                            <li>
+                                <h2 style="color: black">Build your Datbases from <span style="color: white">SQL DUMPS
+                                    </span> </h2>
+                            </li>
+                            <li>
+                                <h2 style="color: black">Build your Datbases from <span style="color: white">SQL DUMPS
+                                    </span> </h2>
+                            </li>
+                            <li>
+                                <h2 style="color: black">Turn your <span style="color: white"> EXCEL FILES</span> into
+                                    Tables </h2>
+                            </li>
+                            <li>
+                                <h2 style="color: black">Get interactivate <span style="color: white">
+                                        VISULIZATIONS</span> </h2>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div style="margin: 100px">
+                        <h1 style="color: white">INSTRUCTIONS FOR RUNNING THE QUERIES</h1>
+                    </div>
+                    <div div style="margin: 100px;text-align: left;margin-left: 200px">
+                        <h2>Follow the following steps to get good results:</h2>
+                        <br>
+                        <ol>
+                            <h3>
+                                <li>
+                                    <h3>Look at the <span style="color: white">TABLE</span> names and <span
+                                            style="color: white">COLUMN</span> names on the Query window</h3>
+                                </li>
+                            </h3>
+
+                            <h3>
+                                <li>
+                                    <h3>Ask you query <span style="color: white">CLEARLY</span> in case of voice and
+                                        write <span style="color: white">CORRECT</span> spellings in the Chat</h3>
+                                    <h6>Don't yell at the screen and Dont use abbrevations. Be professional </h6>
+                                </li>
+                            </h3>
+                            <h3>
+                                <li>
+                                    <h3>Refer the sample Queries for <span style="color: white">ACCURATE</span> results
+                                    </h3>
+                                    <h6>The application is not fool proof so dont be one</h6>
+                                </li>
+                            </h3>
+                            <h3>
+                                <li>
+                                    <h3>The Application is in <span style="color: white">DEVELOPMENT</span> phase so
+                                        DONT expect a great <span style="color: white">ACCURACY</span>,but it works just
+                                        fine</h3>
+                                    <h6>More data and Advanced Machine Learning techniques can improve the ACCURACY but
+                                        it was frankly out of our scope.</h6>
+                                </li>
+                            </h3>
+
+                        </ol>
+                        <br>
+                        <h2>THANK YOU !</h2>
+
+                    </div>
+
+                </div>
+                <div class="carousel-item">
+                    <div style="margin: 100px">
+                        <h1 style="color: white">INSTRUCTIONS FOR UPLOADING FILES</h1>
+                    </div>
+                    <div div style="margin: 100px;text-align: left;margin-left: 200px">
+                        <ul>
+                            <li>
+                                <h3> You can upload your <span style="color: white">SQL DUMP</span> file.</h3>
+                            </li>
+                            <br>
+                            <li>
+                                <h3>You can upload a <span style="color: white">CSV</span> or <span
+                                        style="color: white">EXCEL</span> file.</h3>
+                            </li>
+                            <br>
+                            <li>
+                                <h3>You can call the Application Extension in a <span style="color: white">Jupyter
+                                        Notebook.</span></h3>
+                                <h6>** Convert dataframes to SQL Tables</h6>
+                            </li>
+                            <br>
+                            <li>
+                                <h3>Get not so <span style="color: white">COOL VISULIZATIONS</span>.</h3>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <a href="{% url 'chatbot' %}" class="btn btn-primary ml-2">Query</a>
+                </div>
+            </div>
+            <!-- Carousel controls -->
+            <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </a>
+            <a class="carousel-control-next" href="#myCarousel" data-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>

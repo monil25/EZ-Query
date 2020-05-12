@@ -807,3 +807,6 @@ def upload(request):
         # This is relative path add other path.
         return redirect('chatbot')
     return render(request,'chat/upload.html')
+
+def home(request):
+    return render(request,'chat/carousel.html')
